@@ -151,10 +151,10 @@ export default {
       this.selectedRowKeys = selectedRowKeys
     },
     handleBasicAddClose () {
-      this.BasicAddVisiable = false
+      this.basicAddVisiable = false
     },
     handleBasicAddSuccess () {
-      this.BasicAddVisiable = false
+      this.basicAddVisiable = false
       this.$message.success('新增接口Basic成功')
       this.fetch()
     },

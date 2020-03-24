@@ -13,13 +13,12 @@
       <a-form-item label='接口名称' v-bind="formItemLayout">
         <a-input v-decorator="['dataName',
                    {rules: [
-                    { required: true, message: '接口名称不能为空'},
-                    { max: 20, message: '长度不能超过20个字符'}
+                    { required: true, message: '接口名称不能为空'}
                   ]}]"/>
       </a-form-item>
 
       <a-form-item label='对应实体' v-bind="formItemLayout">
-        <a-input v-decorator="['bean']"/>
+        <a-input v-decorator="['bean',{rules: [{ required: true, message: '对应实体不能为空'}]}]"/>
       </a-form-item>
 
       <a-form-item label='需要更新' v-bind="formItemLayout">
