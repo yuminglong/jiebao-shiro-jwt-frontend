@@ -33,9 +33,9 @@
       <div class="operator">
         <a-button v-hasPermission="'basic:add'" type="primary" ghost @click="add">新增</a-button>
         <a-button v-hasPermission="'basic:delete'" @click="batchDelete">删除</a-button>
-        <a-dropdown v-hasPermission="'basic:export'">
+        <a-dropdown v-hasPermission="'basic:renewalAll'">
           <a-menu slot="overlay">
-            <a-menu-item key="export-data" @click="exportExcel">导出Excel</a-menu-item>
+            <a-menu-item key="export-data" @click="renewalAll">更新全部接口</a-menu-item>
           </a-menu>
           <a-button>
             更多操作 <a-icon type="down" />
@@ -53,12 +53,15 @@
                @change="handleTableChange">
         <template slot="operation" slot-scope="text, record">
           <a-icon v-hasPermission="'basic:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
+          &nbsp;
+          <a-icon v-hasPermission="'basic:renewal'" type="eye" theme="twoTone" twoToneColor="#42b983" @click="view(record)" title="更新"></a-icon>
           <a-badge v-hasNoPermission="'basic:update'" status="warning" text="无权限"></a-badge>
         </template>
       </a-table>
     </div>
-    <!-- 操作
+     <!--操作-->
     <basic-add
+      ref="basicAdd"
       @success="handleBasicAddSuccess"
       @close="handleBasicAddClose"
       :basicAddVisiable="basicAddVisiable">
@@ -69,7 +72,7 @@
       @close="handleBasicEditClose"
       :basicEditVisiable="basicEditVisiable">
     </basic-edit>
-    -->
+
   </a-card>
 </template>
 
@@ -156,7 +159,7 @@ export default {
       this.fetch()
     },
     add () {
-      this.basicEditVisiable = true
+      this.basicAddVisiable = true
     },
     handleBasicEditClose () {
       this.basicEditVisiable = false
@@ -168,7 +171,7 @@ export default {
     },
     edit (record) {
       this.basicEditVisiable = true
-      this.$refs.deptEdit.setFormValues(record)
+      this.$refs.basicEdit.setFormValues(record)
     },
     handleDateChange (value) {
       if (value) {
@@ -198,20 +201,7 @@ export default {
         }
       })
     },
-    exportExcel () {
-      let {sortedInfo} = this
-      let sortField, sortOrder
-      // 获取当前列的排序和列的过滤规则
-      if (sortedInfo) {
-        sortField = sortedInfo.field
-        sortOrder = sortedInfo.order
-      }
-      this.$export('crm/data/excel', {
-        sortField: sortField,
-        sortOrder: sortOrder,
-        ...this.queryParams
-      })
-    },
+
     search () {
       let {sortedInfo} = this
       let sortField, sortOrder
@@ -224,6 +214,23 @@ export default {
         sortField: sortField,
         sortOrder: sortOrder,
         ...this.queryParams
+      })
+    },
+    renewal (record) {
+      this.$post('crm/data/updateData', {
+        ...record
+      }).then((r) => {
+        // this.reset()
+        this.$emit('success')
+      }).catch(() => {
+        this.loading = false
+      })
+    },
+    renewalAll () {
+      this.$post('crm/data/updateDataByAll', {
+
+      }).then((r) => {
+        this.$emit('success')
       })
     },
     reset () {
