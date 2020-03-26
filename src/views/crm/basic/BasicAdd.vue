@@ -30,7 +30,6 @@
           <a-radio value="0">否</a-radio>
         </a-radio-group>
       </a-form-item>
-      、
     </a-form>
     <div class="drawer-bootom-button">
       <a-popconfirm title="确定放弃编辑？" @confirm="onClose" okText="确定" cancelText="取消">
