@@ -8,29 +8,17 @@
             <a-col :md="12" :sm="24" >
               <a-form-item
                 label="查询年份"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <!--<select  @change="handleDateChange"  ref="updateTime" style="width: 150px;height: 30px" >-->
-                  <!--<option label="2020" value="2020-12-01"> </option>-->
-                  <!--<option label="2019" value="2019-12-01"> </option>-->
-                  <!--<option label="2018" value="2018-12-01"> </option>-->
-                  <!--<option label="2017" value="2017-12-01"> </option>-->
-                  <!--<option label="2016" value="2016-12-01"> </option>-->
-                <!--</select>-->
-                <select v-model="selected"  style="width: 150px;height: 30px" @change="handleDateChange">
-                  <option v-for="option in options" v-bind:value="option.value">
+                :labelCol="{span: 3}"
+                :wrapperCol="{span: 10, offset: 1}">
+                <a-select @change="handleDateChange" v-model="queryParams">
+                  <a-select-option v-for="option in options" v-bind:value="option.value">
                     {{ option.text }}
-                  </option>
-                </select>
-              </a-form-item>
-            </a-col>
-
+                  </a-select-option>
+                </a-select>
+                  </a-form-item>
+                </a-col>
           </a-row>
         </div>
-
-        <span style="float: right; margin-top: 3px;">
-          <a-button type="primary" @click="search">查询</a-button>
-        </span>
       </a-form>
     </div>
     <div>
@@ -45,20 +33,35 @@
                :scroll="{ x: 900 }"
                :rowKey="record => record.id"
                @change="handleTableChange">
+        <template slot="operation" slot-scope="text, record">
+          <a-icon type="switcher" theme="twoTone" twoToneColor="#4a9ff5" @click="view(record)" title="查看"></a-icon>
+        </template>
       </a-table>
     </div>
+    <!-- 开支明细查看 -->
+    <pay-detail
+      :payDetailData="payDetail.data"
+      :payDetailVisiable="payDetail.visiable"
+      @close="handlePayDetailClose">
+    </pay-detail>
   </a-card>
 </template>
 
 <script>
+import PayDetail from './PayDetail'
 export default {
   name: 'Pay',
+  components: {PayDetail},
   data () {
     return {
+      payDetail: {
+        visiable: false,
+        data: {}
+      },
       options: [],
       advanced: false,
       dataSource: [],
-      queryParams: new Date().getFullYear() + '-12-01',
+      queryParams: new Date().getFullYear(),
       pagination: {
         pageSizeOptions: ['10', '20', '30', '40', '100'],
         defaultCurrent: 1,
@@ -79,7 +82,7 @@ export default {
         title: '采购支出',
         dataIndex: '采购支出'
       }, {
-        title: '收支流水',
+        title: '开支流水',
         dataIndex: '收支流水'
       }, {
         title: '费用报销',
@@ -89,6 +92,10 @@ export default {
         title: '总计',
         dataIndex: '总计'
 
+      }, {
+        title: '操作',
+        dataIndex: 'operation',
+        scopedSlots: { customRender: 'operation' }
       }]
     }
   },
@@ -96,18 +103,21 @@ export default {
     this.fetch()
   },
   methods: {
-
-    handleDateChange (value) {
-      this.queryParams = value.target.value
+    view (record) {
+      this.payDetail.data = record
+      this.payDetail.visiable = true
+    },
+    handlePayDetailClose () {
+      this.payDetail.visiable = false
+    },
+    handleDateChange () {
+      this.fetch({
+        ...this.queryParams
+      })
     },
     exportExcel () {
       this.$export('crm/purchase/excel', {
         'queryParams': this.queryParams
-      })
-    },
-    search () {
-      this.fetch({
-        ...this.queryParams
       })
     },
     reset () {
@@ -135,12 +145,12 @@ export default {
         this.loading = false
         new Date().getFullYear()
         this.options = [
-          { text: new Date().getFullYear(), value: new Date().getFullYear() + '-12-01' },
-          { text: new Date().getFullYear() - 1, value: new Date().getFullYear() - 1 + '-12-01' },
-          { text: new Date().getFullYear() - 2, value: new Date().getFullYear() - 2 + '-12-01' },
-          { text: new Date().getFullYear() - 3, value: new Date().getFullYear() - 3 + '-12-01' },
-          { text: new Date().getFullYear() - 4, value: new Date().getFullYear() - 4 + '-12-01' },
-          { text: new Date().getFullYear() - 5, value: new Date().getFullYear() - 5 + '-12-01' }
+          { text: new Date().getFullYear(), value: new Date().getFullYear() },
+          { text: new Date().getFullYear() - 1, value: new Date().getFullYear() - 1 },
+          { text: new Date().getFullYear() - 2, value: new Date().getFullYear() - 2 },
+          { text: new Date().getFullYear() - 3, value: new Date().getFullYear() - 3 },
+          { text: new Date().getFullYear() - 4, value: new Date().getFullYear() - 4 },
+          { text: new Date().getFullYear() - 5, value: new Date().getFullYear() - 5 }
         ]
       })
     }

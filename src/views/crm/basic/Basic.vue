@@ -54,7 +54,7 @@
         <template slot="operation" slot-scope="text, record">
           <a-icon v-hasPermission="'basic:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
           &nbsp;
-          <a-icon v-hasPermission="'basic:renewal'" type="eye" theme="twoTone" twoToneColor="#42b983" @click="view(record)" title="更新"></a-icon>
+          <a-icon v-hasPermission="'basic:renewal'" type="rocket" theme="twoTone" twoToneColor="#42b983" @click="renewal(record)" title="更新"></a-icon>
           <a-badge v-hasNoPermission="'basic:update'" status="warning" text="无权限"></a-badge>
         </template>
       </a-table>
