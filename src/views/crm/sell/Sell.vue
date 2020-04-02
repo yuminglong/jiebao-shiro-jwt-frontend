@@ -44,13 +44,13 @@
           <!--<option value="2012">2012</option>-->
           <!--<option value="2011">2011</option>-->
           <!--<option value="2010">2010</option>-->
-          <option v-for="option in options" v-bind:aria-valuemax="option.value">{{option.text}}</option>
+          <option v-for="option in options" :key="option.value"  v-bind:aria-valuemax="option.value">{{option.text}}</option>
           <option @change="setOptions">更多年份</option>
         </select>
         <select @change="selectByMonth" style="width: 100px;height: 30px">
           <option value="0">请选择月份</option>
           <option value="1">1</option>
-          <option value="2">2</option>S
+          <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
           <option value="5">5</option>

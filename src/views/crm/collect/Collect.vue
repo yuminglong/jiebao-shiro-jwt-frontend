@@ -10,7 +10,7 @@
                 label="合同单号"
                 :labelCol="{span: 4}"
                 :wrapperCol="{span: 18, offset: 2}">
-                <a-input v-model.number="queryParams.ht_id" type="number" />
+                <a-input v-model.number="queryParams.htId" type="number" />
               </a-form-item>
             </a-col>
             <a-col :md="12" :sm="24" >

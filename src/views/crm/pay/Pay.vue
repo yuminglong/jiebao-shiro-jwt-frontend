@@ -11,7 +11,7 @@
                 :labelCol="{span: 3}"
                 :wrapperCol="{span: 10, offset: 1}">
                 <a-select @change="handleDateChange" v-model="queryParams">
-                  <a-select-option v-for="option in options" v-bind:value="option.value">
+                  <a-select-option v-for="option in options" :key="option.value"  v-bind:value ="option.value">
                     {{ option.text }}
                   </a-select-option>
                 </a-select>
@@ -33,7 +33,7 @@
                :scroll="{ x: 900 }"
                :rowKey="record => record.id"
                @change="handleTableChange">
-        <template slot="operation" slot-scope="text, record">
+        <template slot="operation" slot-scope="text,record">
           <a-icon type="switcher" theme="twoTone" twoToneColor="#4a9ff5" @click="view(record)" title="查看"></a-icon>
         </template>
       </a-table>
